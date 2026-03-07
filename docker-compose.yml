@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres-sessions:
+    image: postgres:16
+    container_name: hackathon-postgres-sessions
+    environment:
+      POSTGRES_DB: hackathon_sessions
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata-sessions:/var/lib/postgresql/data
+
+  postgres-cards:
+    image: postgres:16
+    container_name: hackathon-postgres-cards
+    environment:
+      POSTGRES_DB: hackathon_cards
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata-cards:/var/lib/postgresql/data
+
+volumes:
+  pgdata-sessions:
+  pgdata-cards:
