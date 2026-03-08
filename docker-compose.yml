@@ -25,6 +25,19 @@ services:
     volumes:
       - pgdata-cards:/var/lib/postgresql/data
 
+  postgres-scores:
+    image: postgres:16
+    container_name: hackathon-postgres-scores
+    environment:
+      POSTGRES_DB: hackathon_scores
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - pgdata-scores:/var/lib/postgresql/data
+
 volumes:
   pgdata-sessions:
   pgdata-cards:
+  pgdata-scores:

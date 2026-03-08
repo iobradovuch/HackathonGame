@@ -1,9 +1,10 @@
 # AI Hackathon: The Game
 
-Платформа для проведення ігрових AI-хакатонів. Складається з двох мікросервісів:
+Платформа для проведення ігрових AI-хакатонів. Складається з трьох мікросервісів:
 
 - **Проєкт 1 (Sessions)** — управління ігровими сесіями, командами, раундами, таймерами
 - **Проєкт 2 (Cards)** — каталог карток (8 мастей), рандомізатор, історія
+- **Проєкт 3 (Scores & Forms)** — система балів, лідерборд, бейджі, інтерактивні форми (Problem Canvas, Crazy 8s)
 
 ## Технології
 
@@ -26,6 +27,9 @@ project_3/
 ├── project2-cards/
 │   ├── backend/                     # .NET Web API (порт 8082)
 │   └── frontend/                    # React + Vite (порт 3002)
+├── project3-scores/
+│   ├── backend/                     # .NET Web API (порт 8083)
+│   └── frontend/                    # React + Vite (порт 3003)
 ```
 
 ## Вимоги
@@ -49,9 +53,10 @@ cd HackathonGame
 docker-compose up -d
 ```
 
-Це створить дві PostgreSQL бази:
+Це створить три PostgreSQL бази:
 - `hackathon_sessions` на порту **5435**
 - `hackathon_cards` на порту **5434**
+- `hackathon_scores` на порту **5436**
 
 Перевірити, що контейнери працюють:
 ```bash
@@ -103,6 +108,29 @@ npm run dev
 
 Відкрити: http://localhost:3002
 
+### 7. Запустити Backend (Проєкт 3 — Scores & Forms)
+
+В іншому терміналі:
+```bash
+cd project3-scores/backend/HackathonGame.ScoresService
+dotnet restore
+dotnet ef database update    # Застосувати міграції
+dotnet run --urls http://localhost:8083
+```
+
+Swagger UI: http://localhost:8083/swagger
+
+### 8. Запустити Frontend (Проєкт 3)
+
+В іншому терміналі:
+```bash
+cd project3-scores/frontend
+npm install
+npm run dev
+```
+
+Відкрити: http://localhost:3003
+
 ## API Endpoints
 
 ### Проєкт 1 — Sessions (порт 8081)
@@ -141,6 +169,56 @@ npm run dev
 | GET | `/api/history/team/{sessionId}/{teamId}` | Історія команди |
 | GET | `/api/history/export/{sessionId}` | Експорт CSV |
 
+### Проєкт 3 — Scores & Forms (порт 8083)
+
+#### Бали (Scores)
+
+| Метод | URL | Опис |
+|-------|-----|------|
+| GET | `/api/scores/{sessionId}` | Лідерборд сесії |
+| GET | `/api/scores/{sessionId}/team/{teamId}` | Бали команди |
+| POST | `/api/scores/{sessionId}/team/{teamId}` | Нарахувати бали |
+| GET | `/api/scores/{sessionId}/history` | Історія нарахувань |
+| GET | `/api/scores/{sessionId}/team/{teamId}/history` | Історія команди |
+
+#### Форми (Forms)
+
+| Метод | URL | Опис |
+|-------|-----|------|
+| POST | `/api/forms/{sessionId}/team/{teamId}` | Зберегти форму |
+| GET | `/api/forms/{sessionId}/team/{teamId}` | Форми команди |
+| GET | `/api/forms/{sessionId}/team/{teamId}/{type}` | Конкретна форма |
+| PUT | `/api/forms/{id}` | Оновити форму |
+| GET | `/api/forms/{sessionId}` | Всі форми сесії |
+
+#### Бейджі (Badges)
+
+| Метод | URL | Опис |
+|-------|-----|------|
+| GET | `/api/badges/types` | Типи бейджів |
+| GET | `/api/badges/{sessionId}` | Бейджі сесії |
+| POST | `/api/badges/{sessionId}/team/{teamId}` | Видати бейдж |
+
+#### Експорт (Export)
+
+| Метод | URL | Опис |
+|-------|-----|------|
+| GET | `/api/export/{sessionId}/history/csv` | Експорт історії CSV |
+| GET | `/api/export/{sessionId}/leaderboard/csv` | Експорт лідерборду CSV |
+
+## Типи бейджів
+
+| Тип | Іконка | Назва | Бонусні бали |
+|-----|--------|-------|-------------|
+| innovator | 💡 | Інноватор | +10 |
+| speedster | ⚡ | Швидкісний | +5 |
+| presenter | 🎤 | Презентатор | +10 |
+| teamwork | 🤝 | Командна робота | +5 |
+| problem_solver | 🧩 | Вирішувач проблем | +10 |
+| creative | 🎨 | Креативний | +10 |
+| survivor | 🛡️ | Вижилець | +15 |
+| mvp | 🏆 | MVP | +20 |
+
 ## Масті карток
 
 | Масть | Назва UA | Колір |
@@ -160,10 +238,13 @@ npm run dev
 |--------|------|
 | PostgreSQL (Sessions) | 5435 |
 | PostgreSQL (Cards) | 5434 |
+| PostgreSQL (Scores) | 5436 |
 | Backend Sessions | 8081 |
 | Backend Cards | 8082 |
+| Backend Scores | 8083 |
 | Frontend Sessions | 3001 |
 | Frontend Cards | 3002 |
+| Frontend Scores | 3003 |
 
 ## Зупинити сервіси
 
