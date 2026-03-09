@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import sessionApi from '../services/sessionApi'
 
 function CreateSessionPage() {
@@ -27,6 +27,9 @@ function CreateSessionPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="card-cyber w-full max-w-md">
+        <div className="mb-6">
+          <Link to="/" className="text-gray-400 hover:text-neon-cyan text-sm">← На головну</Link>
+        </div>
         <h1 className="font-cyber text-2xl text-neon-cyan mb-8 text-center">
           Створити сесію
         </h1>

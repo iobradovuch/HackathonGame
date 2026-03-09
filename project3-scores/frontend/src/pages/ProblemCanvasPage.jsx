@@ -62,7 +62,7 @@ export default function ProblemCanvasPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <Link to="/forms" className="text-gray-400 hover:text-neon-cyan text-sm">← Назад</Link>
+        <Link to={`/forms?session=${sessionId}&team=${teamId}`} className="text-gray-400 hover:text-neon-cyan text-sm">← Назад</Link>
         <div className="text-sm">
           {saving && <span className="text-yellow-400">💾 Збереження...</span>}
           {saved && !saving && <span className="text-neon-green">✓ Збережено</span>}

@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # ===== DATABASES =====
   postgres-sessions:
     image: postgres:16
     container_name: hackathon-postgres-sessions
@@ -12,6 +11,11 @@ services:
       - "5435:5432"
     volumes:
       - pgdata-sessions:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   postgres-cards:
     image: postgres:16
@@ -24,6 +28,11 @@ services:
       - "5434:5432"
     volumes:
       - pgdata-cards:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   postgres-scores:
     image: postgres:16
@@ -36,6 +45,94 @@ services:
       - "5436:5432"
     volumes:
       - pgdata-scores:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ===== BACKENDS =====
+  backend-sessions:
+    build:
+      context: ./project1-sessions/backend
+      dockerfile: Dockerfile
+    container_name: hackathon-backend-sessions
+    ports:
+      - "8081:8081"
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:8081"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres-sessions;Port=5432;Database=hackathon_sessions;Username=postgres;Password=postgres"
+    depends_on:
+      postgres-sessions:
+        condition: service_healthy
+
+  backend-cards:
+    build:
+      context: ./project2-cards/backend
+      dockerfile: Dockerfile
+    container_name: hackathon-backend-cards
+    ports:
+      - "8082:8082"
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:8082"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres-cards;Port=5432;Database=hackathon_cards;Username=postgres;Password=postgres"
+    depends_on:
+      postgres-cards:
+        condition: service_healthy
+
+  backend-scores:
+    build:
+      context: ./project3-scores/backend
+      dockerfile: Dockerfile
+    container_name: hackathon-backend-scores
+    ports:
+      - "8083:8083"
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:8083"
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres-scores;Port=5432;Database=hackathon_scores;Username=postgres;Password=postgres"
+    depends_on:
+      postgres-scores:
+        condition: service_healthy
+
+  # ===== FRONTENDS =====
+  frontend-sessions:
+    build:
+      context: ./project1-sessions/frontend
+      dockerfile: Dockerfile
+    container_name: hackathon-frontend-sessions
+    ports:
+      - "3001:3001"
+    environment:
+      BACKEND_URL: "http://backend-sessions:8081"
+    depends_on:
+      - backend-sessions
+
+  frontend-cards:
+    build:
+      context: ./project2-cards/frontend
+      dockerfile: Dockerfile
+    container_name: hackathon-frontend-cards
+    ports:
+      - "3002:3002"
+    environment:
+      BACKEND_URL: "http://backend-cards:8082"
+    depends_on:
+      - backend-cards
+
+  frontend-scores:
+    build:
+      context: ./project3-scores/frontend
+      dockerfile: Dockerfile
+    container_name: hackathon-frontend-scores
+    ports:
+      - "3003:3003"
+    environment:
+      BACKEND_URL: "http://backend-scores:8083"
+    depends_on:
+      - backend-scores
 
 volumes:
   pgdata-sessions:

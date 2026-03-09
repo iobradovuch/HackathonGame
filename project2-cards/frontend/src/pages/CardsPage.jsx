@@ -47,22 +47,13 @@ function CardsPage() {
   })
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="font-cyber text-3xl text-neon-cyan">Каталог карток</h1>
-            <p className="text-gray-400 mt-1">8 мастей, {cards.length} карток</p>
-          </div>
-          <div className="flex gap-3">
-            <Link to="/randomizer" className="btn-neon text-sm">Рандомізатор</Link>
-            <Link to="/history" className="btn-neon-pink text-sm">Історія</Link>
-            <Link to="/admin" className="btn-neon text-sm">Адмін</Link>
-          </div>
-        </div>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="font-cyber text-3xl text-neon-cyan">Каталог карток</h1>
+        <p className="text-gray-400 mt-1">8 мастей, {cards.length} карток</p>
+      </div>
 
-        {/* Search */}
+      {/* Search */}
         <input
           type="text"
           placeholder="Пошук карток за назвою або описом..."
@@ -194,7 +185,6 @@ function CardsPage() {
             })}
           </div>
         )}
-      </div>
     </div>
   )
 }

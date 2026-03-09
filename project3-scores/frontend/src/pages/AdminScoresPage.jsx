@@ -67,6 +67,14 @@ export default function AdminScoresPage() {
   return (
     <div className="space-y-8">
       <div className="text-center">
+        <div className="flex justify-center gap-3 mb-4">
+          <a href="http://localhost:3001" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+            Адмін сесій →
+          </a>
+          <a href="http://localhost:3002/admin" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+            Адмін карток →
+          </a>
+        </div>
         <h1 className="font-cyber text-4xl text-neon-cyan mb-2">АДМІН ПАНЕЛЬ</h1>
         <p className="text-gray-400">Управління балами та бейджами</p>
       </div>

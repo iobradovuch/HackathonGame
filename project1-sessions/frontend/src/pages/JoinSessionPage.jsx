@@ -55,10 +55,14 @@ function JoinSessionPage() {
     setError('')
     try {
       const validMembers = members.filter(m => m.name.trim())
-      await sessionApi.registerTeam(code, {
+      const res = await sessionApi.registerTeam(code, {
         name: teamName,
         members: validMembers.length > 0 ? validMembers : undefined,
       })
+      // Save session/team context for cross-project navigation
+      localStorage.setItem('hackathon_session', code)
+      localStorage.setItem('hackathon_teamId', String(res.data.id))
+      localStorage.setItem('hackathon_teamName', res.data.name || teamName)
       navigate(`/session/${code}`)
     } catch (err) {
       setError(err.response?.data?.message || 'Помилка реєстрації команди')

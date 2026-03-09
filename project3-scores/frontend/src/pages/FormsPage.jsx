@@ -1,14 +1,25 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import formsApi from '../services/formsApi'
 
 export default function FormsPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [sessionId, setSessionId] = useState('')
   const [teamId, setTeamId] = useState('')
   const [forms, setForms] = useState([])
   const [loading, setLoading] = useState(false)
   const [loaded, setLoaded] = useState(false)
+
+  // Prefill from URL query params or localStorage
+  useEffect(() => {
+    const urlSession = searchParams.get('session')
+    const urlTeam = searchParams.get('team')
+    const s = urlSession || localStorage.getItem('hackathon_session') || ''
+    const t = urlTeam || localStorage.getItem('hackathon_teamId') || ''
+    setSessionId(s)
+    setTeamId(t)
+  }, [])
 
   const loadForms = async () => {
     if (!sessionId || !teamId) return
@@ -40,7 +51,9 @@ export default function FormsPage() {
         <input className="input-cyber max-w-[120px] text-center"
                placeholder="Team ID" value={teamId} type="number"
                onChange={e => setTeamId(e.target.value)} />
-        <button className="btn-neon" onClick={loadForms}>Завантажити</button>
+        <button className="btn-neon" onClick={loadForms}>
+          {loading ? 'Завантаження...' : 'Завантажити'}
+        </button>
       </div>
 
       {sessionId && teamId && (

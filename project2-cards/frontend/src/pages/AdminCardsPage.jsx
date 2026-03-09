@@ -120,21 +120,25 @@ function AdminCardsPage() {
     : cards
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="font-cyber text-3xl text-neon-cyan">Адмін: Картки</h1>
-            <p className="text-gray-500 text-sm mt-1">{cards.length} карток у базі</p>
-          </div>
-          <div className="flex gap-3">
-            <Link to="/" className="btn-neon text-sm">Каталог</Link>
-            <button onClick={openCreate} className="btn-neon-pink">
-              + Нова картка
-            </button>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="font-cyber text-3xl text-neon-cyan">Адмін: Картки</h1>
+          <p className="text-gray-500 text-sm mt-1">{cards.length} карток у базі</p>
         </div>
+        <div className="flex gap-3">
+          <a href="http://localhost:3001" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+            Адмін сесій →
+          </a>
+          <a href="http://localhost:3003/admin" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+            Адмін балів →
+          </a>
+          <button onClick={openCreate} className="btn-neon-pink">
+            + Нова картка
+          </button>
+        </div>
+      </div>
 
         {/* Create/Edit Form */}
         {showForm && (
@@ -335,7 +339,6 @@ function AdminCardsPage() {
             </tbody>
           </table>
         </div>
-      </div>
     </div>
   )
 }

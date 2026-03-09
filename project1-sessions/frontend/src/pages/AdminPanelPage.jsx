@@ -123,6 +123,12 @@ function AdminPanelPage() {
         <div className="flex justify-between items-center mb-2">
           <h1 className="font-cyber text-3xl text-neon-cyan">Адмін панель</h1>
           <div className="flex gap-3">
+            <a href="http://localhost:3002/admin" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+              Адмін карток →
+            </a>
+            <a href="http://localhost:3003/admin" className="text-xs px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:text-white hover:border-gray-400 transition-all">
+              Адмін балів →
+            </a>
             <Link to={`/session/${code}`} className="btn-neon text-sm">Дашборд</Link>
             <Link to="/" className="btn-neon text-sm">Головна</Link>
           </div>
